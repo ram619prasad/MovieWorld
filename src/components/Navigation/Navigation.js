@@ -9,16 +9,16 @@ const navigation = () => {
             <ul className={classes.navList}>
                 <NavigationItem
                     to="/movie" 
-                    className={classes.navListItem}
-                    activeClassName={classes.navListItemActive}>Movies</NavigationItem>
+                    classes={classes.navListItem}
+                    activeClass={classes.navListItemActive}>Movies</NavigationItem>
                 <NavigationItem 
                     to="/tv" 
-                    className={classes.navListItem}
-                    activeClassName={classes.navListItemActive}>TV Shows</NavigationItem>
+                    classes={classes.navListItem}
+                    activeClass={classes.navListItemActive}>TV Shows</NavigationItem>
                 <NavigationItem 
                     to="/people"
-                    className={classes.navListItem}
-                    activeClassName={classes.navListItemActive}>Discover People</NavigationItem>
+                    classes={classes.navListItem}
+                    activeClass={classes.navListItemActive}>Discover People</NavigationItem>
             </ul>
         </nav>
     );
