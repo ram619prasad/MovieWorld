@@ -1,0 +1,31 @@
+.nav {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.navList {
+    margin: 0;
+    padding: 0;
+    width: 50%;
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navListItem {
+    font-size: 1.8rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(3, 48, 32, .6);
+    transition: all .6s;
+}
+
+.navListItemActive {
+    color: rgba(3, 48, 32);
+}
+
+.navListItem:hover {
+    color: rgba(3, 48, 32);
+}

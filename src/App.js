@@ -5,6 +5,10 @@ import classes from './App.module.css';
 import Layout from './containers/Layout/Layout';
 
 class App extends Component {
+  state = {
+    popularMovies: []
+  }
+
   // componentDidMount() {
   //   axios.get('/popular')
   //     .then(res => {

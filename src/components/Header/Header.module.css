@@ -1,39 +1,4 @@
 .header {
     height: 10rem;
     background-color: aquamarine;
-    /* display: flex;
-    justify-content: flex-end;
-    align-items: center; */
-}
-
-.headerNav {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.headerList {
-    margin: 0;
-    padding: 0;
-    width: 50%;
-    display: flex;
-    justify-content: space-around;
-}
-
-.headerListItem {
-    list-style: none;
-    font-size: 1.8rem;
-    text-transform: uppercase;
-}
-
-.headerLink:link,
-.headerLink:visited {
-    text-decoration: none;
-    color: rgba(3, 48, 32, .6);
-}
-
-.headerLink:hover,
-.headerLink:active {
-    color: rgba(3, 48, 32);
 }

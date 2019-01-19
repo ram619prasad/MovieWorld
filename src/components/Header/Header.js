@@ -1,11 +1,13 @@
 import React from 'react';
 
+import Navigation from '../Navigation/Navigation';
 import classes from './Header.module.css';
 
 const header = () => {
     return(
         <header className={classes.header}>
-            <nav className={classes.headerNav}>
+            <Navigation />
+            {/* <nav className={classes.headerNav}>
                 <ul className={classes.headerList}>
                     <li className={classes.headerListItem}>
                         <a href="/" className={classes.headerLink}>Movies</a>
@@ -17,7 +19,7 @@ const header = () => {
                         <a href="/" className={classes.headerLink}>Discover People</a>
                     </li>
                 </ul>
-            </nav>
+            </nav> */}
         </header>
     );
 };
