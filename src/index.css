@@ -36,3 +36,8 @@ html {
   font-size: 62.5%;
   color: #717173;
 }
+
+body h3 {
+  font-size: 2.4rem;
+  margin: 0;
+}

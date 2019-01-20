@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CircularProgress from '../../../components/CircularProgress/CircularProgress';
+import moment from 'moment';
 
+import CircularProgress from '../../../components/CircularProgress/CircularProgress';
 import classes from './MovieListItem.module.css';
 
 const movieListItem = (props) => {
@@ -12,9 +13,9 @@ const movieListItem = (props) => {
             <img src={poster_path} alt={title} className={classes.moviePoster}/>
             <div className={classes.movieInfo}>
                 <CircularProgress percentage={vote_average * 10}/>
-                <div>
+                <div className={classes.movieInfoContainer}>
                     <h3>{title}</h3>
-                    <strong>{release_date}</strong>
+                    <strong>{moment(release_date).format('LL')}</strong>
                 </div>
             </div>
         </div>
