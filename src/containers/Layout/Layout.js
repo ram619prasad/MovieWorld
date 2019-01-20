@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
+import classes from './Layout.module.css';
 import Header from '../../components/Header/Header';
 import MoviesList from '../MoviesList/MoviesList';
 import TVList from '../TVList/TVList';
@@ -11,7 +12,7 @@ class Layout extends Component {
         return (
             <React.Fragment>
                 <Header />
-                <main style={{display: 'grid'}}>
+                <main className={classes.layout}>
                     <Route path="/" exact render={() => <Redirect to="/movie" />} />
                     <Route path="/movie" component={MoviesList} />
                     <Route path="/tv" component={TVList} />
