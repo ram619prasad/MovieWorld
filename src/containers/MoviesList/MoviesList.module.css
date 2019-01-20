@@ -3,3 +3,11 @@
     margin-top: 5rem;
     font-weight: 400;
 }
+
+.movieContainer {
+    margin: 2rem 10rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-items: center;
+    grid-gap: 2rem 4rem;
+}

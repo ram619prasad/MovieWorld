@@ -3,6 +3,7 @@ import axios from '../../axiosInstances/movieInstance';
 
 import Loader from '../../components/Loader/Loader';
 import classes from './MoviesList.module.css';
+import MoviesListItem from './MovieListItem/MovieListItem';
 
 class MoviesList extends Component {
     state = {
@@ -14,7 +15,11 @@ class MoviesList extends Component {
     axios.get('/popular')
         .then(res => {
             let popularMovies = res.data.results.map((mov) => {
-                return { [mov.id]: {...mov} }
+                return { 
+                    [mov.id]: { ...mov,
+                                poster_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + mov.poster_path
+                              }
+                }
             });
 
             this.setState({
@@ -31,9 +36,6 @@ class MoviesList extends Component {
     }
 
     render() {
-        console.log('====================================');
-        console.log('env', process.env);
-        console.log('====================================');
         let movieList = <Loader/>;
 
         if(this.state.errored) {
@@ -45,7 +47,20 @@ class MoviesList extends Component {
         }
 
         if(this.state.popularMovies.length > 0) {
-            movieList = <h1>MoviesList</h1>;
+            let movieListItems = this.state.popularMovies.map((mov) => {
+                                    let id, data;
+                                    for(let key in mov) {
+                                        id = key
+                                        data = mov[id]
+                                    }
+                                    return <MoviesListItem key={id} data={data}/>
+                                });
+
+            movieList = (
+                <div className={classes.movieContainer}>
+                    {movieListItems}
+                </div>
+            );
         }
 
         return movieList

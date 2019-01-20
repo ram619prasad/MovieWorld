@@ -11,7 +11,7 @@ class Layout extends Component {
         return (
             <React.Fragment>
                 <Header />
-                <main>
+                <main style={{display: 'grid'}}>
                     <Route path="/" exact render={() => <Redirect to="/movie" />} />
                     <Route path="/movie" component={MoviesList} />
                     <Route path="/tv" component={TVList} />
