@@ -1,59 +1,31 @@
 import React, { Component } from 'react';
-import axios from '../../axiosInstances/movieInstance';
+import { connect } from 'react-redux';
 
 import Loader from '../../components/Loader/Loader';
 import classes from './MoviesList.module.css';
 import MoviesListItem from './MovieListItem/MovieListItem';
+import { fetchPopularMoviesInit } from '../../store/actions/index';
 
 class MoviesList extends Component {
-    state = {
-        popularMovies: [],
-        errored: false
-    }
-    
     componentDidMount() {
-    axios.get('/popular')
-        .then(res => {
-            let popularMovies = res.data.results.map((mov) => {
-                return { 
-                    [mov.id]: { ...mov,
-                                poster_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + mov.poster_path
-                              }
-                }
-            });
-
-            this.setState({
-                ...this.state,
-                popularMovies: popularMovies,
-            });
-        })
-        .catch(err => {
-            this.setState({ 
-                ...this.state,
-                errored: true
-            });
-        })
+        let page = this.props.match.params.id;
+        this.props.fetchMovies(page);
     }
 
     render() {
         let movieList = <Loader/>;
 
-        if(this.state.errored) {
+        if (this.props.errors) {
             movieList = (
                 <div className={classes.errorContainer}>
                     <p>Fetching failed. Please check your connection and try again.</p>
                 </div>
-            )
-        }
+            );
+        };
 
-        if(this.state.popularMovies.length > 0) {
-            let movieListItems = this.state.popularMovies.map((mov) => {
-                                    let id, data;
-                                    for(let key in mov) {
-                                        id = key
-                                        data = mov[id]
-                                    }
-                                    return <MoviesListItem key={id} data={data}/>
+        if (this.props.popularMovies) {
+            let movieListItems = this.props.popularMovies.map((mov) => {
+                                    return <MoviesListItem key={mov.id} data={mov}/>
                                 });
 
             movieList = (
@@ -61,10 +33,35 @@ class MoviesList extends Component {
                     {movieListItems}
                 </div>
             );
-        }
+        };
 
-        return movieList
+        return movieList;
     };
 };
 
-export default MoviesList;
+const mapStateToProps = state => {
+    let {movies, loading, errors, current_page, total_pages} = state.movies.popular;
+
+    let currentPageMovies = movies.find((movie) => {
+        let moviePage = Number(Object.keys(movie)[0]);
+        if(moviePage === current_page) {
+            return movie;
+        };
+    });
+
+    return {
+        popularMovies: currentPageMovies && Object.values(currentPageMovies)[0],
+        loading: loading,
+        errors: errors,
+        current_page: current_page,
+        total_pages: total_pages
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchMovies: (page) => dispatch(fetchPopularMoviesInit(page))
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MoviesList);

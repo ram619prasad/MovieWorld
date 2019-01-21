@@ -13,8 +13,8 @@ class Layout extends Component {
             <React.Fragment>
                 <Header />
                 <main className={classes.layout}>
-                    <Route path="/" exact render={() => <Redirect to="/movie" />} />
-                    <Route path="/movie" component={MoviesList} />
+                    <Route path="/" exact render={() => <Redirect to="/movie/1" />} />
+                    <Route path="/movie/:id" render={(props) => <MoviesList key={props.match.params.id} {...props} /> } />
                     <Route path="/tv" component={TVList} />
                     <Route path="/people" component={PeopleList} />
                 </main>
