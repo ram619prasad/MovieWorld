@@ -9,7 +9,11 @@ import { fetchPopularMoviesInit } from '../../store/actions/index';
 class MoviesList extends Component {
     componentDidMount() {
         let page = this.props.match.params.id;
-        this.props.fetchMovies(page);
+        let fetchMovies = this.props.movies.map((mov) => Object.keys(mov)[0]);
+
+        if (fetchMovies.indexOf(page) === -1) {
+            this.props.fetchMovies(page);
+        }
     }
 
     render() {
@@ -23,8 +27,8 @@ class MoviesList extends Component {
             );
         };
 
-        if (this.props.popularMovies) {
-            let movieListItems = this.props.popularMovies.map((mov) => {
+        if (this.props.currentPageMovies) {
+            let movieListItems = this.props.currentPageMovies.map((mov) => {
                                     return <MoviesListItem key={mov.id} data={mov}/>
                                 });
 
@@ -39,18 +43,19 @@ class MoviesList extends Component {
     };
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps)=> {
     let {movies, loading, errors, current_page, total_pages} = state.movies.popular;
 
     let currentPageMovies = movies.find((movie) => {
-        let moviePage = Number(Object.keys(movie)[0]);
-        if(moviePage === current_page) {
+        let moviePage = Object.keys(movie)[0];
+        if(moviePage === ownProps.match.params.id) {
             return movie;
         };
     });
 
     return {
-        popularMovies: currentPageMovies && Object.values(currentPageMovies)[0],
+        movies: movies,
+        currentPageMovies: currentPageMovies && Object.values(currentPageMovies)[0],
         loading: loading,
         errors: errors,
         current_page: current_page,
