@@ -3,7 +3,10 @@ import axios from '../../axiosInstances/movieInstance';
 import { 
     FETCH_MOVIES_STARTED,
     FETCH_MOVIES_COMPLETED,
-    FETCH_MOVIES_FAILED
+    FETCH_MOVIES_FAILED,
+    FETCH_DETAILED_MOVIE_STARTED,
+    FETCH_DETAILED_MOVIE_FAILED,
+    FETCH_DETAILED_MOVIE_COMPLETED
 } from './actionTypes';
 
 export const fetchMoviesStarted = () => {
@@ -47,6 +50,39 @@ export const fetchPopularMoviesInit = (pageNo) => {
             })
             .catch(err => {
                 dispatch(fetchMoviesFailed('Fetching movies failed'));
+            });
+    };
+};
+
+export const fetchDetailedMovieStarted = () => {
+    return {
+        type: FETCH_DETAILED_MOVIE_STARTED
+    };
+};
+
+export const fetchDetailedMovieFailed = (error) => {
+    return {
+        type: FETCH_DETAILED_MOVIE_FAILED,
+        error: error
+    };
+};
+
+export const fetchDetailedMovieCompleted = (movie) => {
+    return {
+        type: FETCH_DETAILED_MOVIE_COMPLETED,
+        movie: movie,
+    };
+};
+
+export const fetchDetailedMoviesInit = (id) => {
+    return dispatch => {
+        dispatch(fetchDetailedMovieStarted());
+        axios.get(`/${id}`)
+            .then(res => {
+                dispatch(fetchDetailedMovieCompleted(res.data));
+            })
+            .catch(err => {
+                dispatch(fetchDetailedMovieFailed(`Fetching Movie with Id ${id} failed. Please try again`));
             });
     };
 };

@@ -1,7 +1,10 @@
 import { 
     FETCH_MOVIES_STARTED,
     FETCH_MOVIES_COMPLETED,
-    FETCH_MOVIES_FAILED
+    FETCH_MOVIES_FAILED,
+    FETCH_DETAILED_MOVIE_STARTED,
+    FETCH_DETAILED_MOVIE_FAILED,
+    FETCH_DETAILED_MOVIE_COMPLETED
 } from '../actions/actionTypes';
 
 const initialState = {
@@ -10,7 +13,12 @@ const initialState = {
         loading: false,
         errors: null,
         current_page: 1,
-        total_pages: null
+        total_pages: null,
+        currentlyViewing: {
+            loading: false,
+            errors: null,
+            movie: null
+        }
     }
 };
 
@@ -45,6 +53,41 @@ const moviesReducer = (state = initialState, action) => {
                     movies: fetchedPages.indexOf(action.current_page.toString()) >= 0
                                 ? state.popular.movies
                                 : [...state.popular.movies, action.movies]
+                }
+            }
+        case FETCH_DETAILED_MOVIE_STARTED:
+            return {
+                ...state,
+                popular: {
+                    ...state.popular,
+                    currentlyViewing: {
+                        ...state.popular.currentlyViewing,
+                        loading: true
+                    }
+                }
+            }
+        case FETCH_DETAILED_MOVIE_FAILED:
+            return {
+                ...state,
+                popular: {
+                    ...state.popular,
+                    currentlyViewing: {
+                        ...state.currentlyViewing,
+                        loading: false,
+                        errors: action.error
+                    }
+                }
+            }
+        case FETCH_DETAILED_MOVIE_COMPLETED:
+            return {
+                ...state,
+                popular: {
+                    ...state.popular,
+                    currentlyViewing: {
+                        ...state.currentlyViewing,
+                        loading: false,
+                        movie: action.movie
+                    }
                 }
             }
         default:
