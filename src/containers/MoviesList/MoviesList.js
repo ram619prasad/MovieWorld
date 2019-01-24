@@ -27,6 +27,13 @@ class MoviesList extends Component {
         };
     };
 
+    componentDidUpdate = () => { window.scrollTo(0, 0); }
+
+    handleMovieClick = (id) => {
+        let url = `${this.location.pathname}/${id}`;
+        this.props.history.push(url)
+    }
+
     render() {
         let movieList = <Loader/>;
 
@@ -40,11 +47,14 @@ class MoviesList extends Component {
 
         if (this.props.currentPageMovies) {
             let movieListItems = this.props.currentPageMovies.map((mov) => {
-                                    return <MoviesListItem key={mov.id} data={mov}/>
+                                    return <MoviesListItem
+                                                key={mov.id}
+                                                data={mov}
+                                                movieClickHandler={() => this.handleMovieClick(mov.id)}/>
                                 });
 
             movieList = (
-                <div className={classes.movieContainer}>
+                <div className={classes.movieContainer} ref={(ref) => this._div = ref} >
                     {movieListItems}
                 </div>
             );

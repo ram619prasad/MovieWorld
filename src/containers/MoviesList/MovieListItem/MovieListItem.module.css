@@ -9,6 +9,7 @@
 .moviePoster {
     width: 100%;
     height: 80%;
+    cursor: pointer;
 }
 
 .movieInfo {
@@ -17,6 +18,11 @@
     background-color: #fff;
     align-items: center;
     margin: 0 2rem;
+}
+
+.movieTitle {
+    cursor: pointer;
+    max-width: 100%;
 }
 
 .movieInfoContainer {

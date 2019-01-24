@@ -10,11 +10,16 @@ const movieListItem = (props) => {
 
     return (
         <div className={classes.movieCard}>
-            <img src={poster_path} alt={title} className={classes.moviePoster}/>
+            <img src={poster_path} alt={title}
+                 className={classes.moviePoster}
+                 onClick={props.movieClickHandler}
+            />
             <div className={classes.movieInfo}>
                 <CircularProgress percentage={vote_average * 10}/>
                 <div className={classes.movieInfoContainer}>
-                    <h3>{title}</h3>
+                    <h3 className={classes.movieTitle} onClick={props.movieClickHandler}>
+                        {title}
+                    </h3>
                     <strong>{moment(release_date).format('LL')}</strong>
                 </div>
             </div>
