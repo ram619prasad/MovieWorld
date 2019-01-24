@@ -8,15 +8,15 @@ const navigation = () => {
         <nav className={classes.nav}>
             <ul className={classes.navList}>
                 <NavigationItem
-                    to="/movie/1" 
+                    to="/movie/popular"
                     classes={classes.navListItem}
                     activeClass={classes.navListItemActive}>Movies</NavigationItem>
                 <NavigationItem 
-                    to="/movie/2" 
+                    to="/tv/popular"
                     classes={classes.navListItem}
                     activeClass={classes.navListItemActive}>TV Shows</NavigationItem>
                 <NavigationItem 
-                    to="/movie/3"
+                    to="/people"
                     classes={classes.navListItem}
                     activeClass={classes.navListItemActive}>Discover People</NavigationItem>
             </ul>
