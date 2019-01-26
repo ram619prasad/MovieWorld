@@ -31,13 +31,42 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+body * {
+  margin: 0;
+  padding: 0
+}
+
 html {
   font-family: 'Roboto';
   font-size: 62.5%;
   color: #717173;
 }
 
+body p {
+  font-family: 'Roboto Light';
+  line-height: 1.5;
+  font-size: 1.6rem;
+  text-align: justify;
+  font-weight: 600;
+  color: #fff;
+}
+
+body h1 {
+  font-size: 3rem;
+  font-family: 'Roboto Bold';
+}
+
+body h2 {
+  font-size: 2.5rem;
+  font-family: 'Roboto Bold';
+}
+
 body h3 {
+  font-size: 2.2rem;
+  font-family: 'Roboto Bold';
+}
+
+body h4 {
   font-size: 1.8rem;
-  margin: 0;
+  font-family: 'Roboto Bold';
 }

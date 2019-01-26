@@ -77,9 +77,14 @@ export const fetchDetailedMovieCompleted = (movie) => {
 export const fetchDetailedMoviesInit = (id) => {
     return dispatch => {
         dispatch(fetchDetailedMovieStarted());
-        axios.get(`/${id}`)
+        axios.get(`/${id}`, { params: {append_to_response: 'credits'}})
             .then(res => {
-                dispatch(fetchDetailedMovieCompleted(res.data));
+                let data = res.data;
+                let movie = {   ...data,
+                                backdrop_path: process.env.REACT_APP_API_MOVIE_BACKDROP_URL + data.backdrop_path,
+                                poster_path: process.env.REACT_APP_API_POSTER_BASE_URL + data.poster_path
+                            }
+                dispatch(fetchDetailedMovieCompleted(movie));
             })
             .catch(err => {
                 dispatch(fetchDetailedMovieFailed(`Fetching Movie with Id ${id} failed. Please try again`));

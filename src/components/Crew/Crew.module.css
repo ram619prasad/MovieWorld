@@ -1,0 +1,23 @@
+.crewContainer {
+    color: #fff;
+    margin: 0 2rem;
+    /* padding: 1rem; */
+}
+
+.crewTitle {
+    margin-bottom: .8rem;
+}
+
+.crewContainer:first-child {
+    margin-left: 0;
+}
+
+.crewContainer ul{
+    list-style: none;
+}
+
+.crewListItem {
+    font-size: 1.3rem;
+    margin: .3rem 0;
+    font-family: 'Roboto Italic';
+}

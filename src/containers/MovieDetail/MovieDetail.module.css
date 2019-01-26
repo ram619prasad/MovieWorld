@@ -1,0 +1,40 @@
+.imageCommonProperties {
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.movieContainer {
+    height: 40rem;
+    display: grid;
+    align-items: center;
+    padding: 8rem;
+    composes: imageCommonProperties;
+    background-size: cover;
+    margin-bottom: 2rem;
+}
+
+.movieInfoContainer {
+    display: grid;
+    grid-template-columns: 35% 60%;
+    grid-gap: 5%;
+    width: 95%;
+    height: 100%;
+}
+
+.moviePoster {
+    composes: imageCommonProperties;
+    background-size: contain;
+}
+
+.movieDetails > * {
+    color: #2b90ef;
+}
+
+.movieDetails * {
+    margin: 1rem 0;
+}
+
+.crewList {
+    display: flex;
+}
