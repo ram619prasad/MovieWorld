@@ -3,5 +3,5 @@ export {
     fetchMoviesCompleted,
     fetchMoviesFailed,
     fetchPopularMoviesInit,
-    fetchDetailedMoviesInit
+    fetchMovieInit
 } from './movies';

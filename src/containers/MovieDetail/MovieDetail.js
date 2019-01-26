@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import { fetchDetailedMoviesInit } from '../../store/actions/index';
+import { fetchMovieInit } from '../../store/actions/index';
 import classes from './MovieDetail.module.css';
 import Loader from '../../components/Loader/Loader';
 import CircularProgress from '../../components/CircularProgress/CircularProgress';
 import Crew from '../../components/Crew/Crew';
 import Cast from '../../components/Cast/Cast';
+import Media from '../Media/Media';
 
 class MovieDetail extends Component {
     componentDidMount() {
@@ -35,14 +36,14 @@ class MovieDetail extends Component {
 
 
     render() {
-        let movie = <Loader />
-        if(this.props.movie) {
-
-            let backgroundImage = `url(${this.props.movie.backdrop_path})`;
-            let posterImage = `url(${this.props.movie.poster_path})`;
-            let movieYear = moment(this.props.movie.release_date).format('YYYY');
-            let consolidatedCrew = this.consolidatedCrew(this.props.movie.credits.crew);
-            let topCast = this.props.movie.credits.cast.slice(0, 5);
+        let {movie, videos, posters, backdrops} = this.props;
+        let movieMarkup = <Loader />
+        if (movie && videos && posters && backdrops) {
+            let backgroundImage = `url(${movie.backdrop_path})`;
+            let posterImage = `url(${movie.poster_path})`;
+            let movieYear = moment(movie.release_date).format('YYYY');
+            let consolidatedCrew = this.consolidatedCrew(movie.credits.crew);
+            let topCast = movie.credits.cast.slice(0, 5);
 
             let finalCrew = []
             for(let key in consolidatedCrew) {
@@ -50,17 +51,17 @@ class MovieDetail extends Component {
             }
             
 
-            movie = (
+            movieMarkup = (
                 <React.Fragment>
                     <div className={classes.movieContainer} style={{backgroundImage: `${backgroundImage}`}}>
                         <div className={classes.movieInfoContainer}>
                             <div className={classes.moviePoster} style={{backgroundImage: posterImage}}></div>
                             <div className={classes.movieDetails}>
-                                <h1>{this.props.movie.original_title} <strong>({movieYear})</strong></h1>
-                                <CircularProgress percentage={this.props.movie.vote_average * 10}/>
+                                <h1>{movie.original_title} <strong>({movieYear})</strong></h1>
+                                <CircularProgress percentage={movie.vote_average * 10}/>
                                 <div>
                                     <h3>Overview</h3>
-                                    <p>{this.props.movie.overview}</p>
+                                    <p>{movie.overview}</p>
                                 </div>
                                 <div className={classes.crewContainer}>
                                     <h3>Featured Crew</h3>
@@ -72,28 +73,40 @@ class MovieDetail extends Component {
                         </div>
                     </div>
 
-                    <div>
-                        <Cast cast/>
+                    <div className={classes.castContainer}>
+                        <Cast cast={topCast}/>
+                    </div>
+
+                    <div className={classes.mediaContainer}>
+                        <Media
+                            videos={videos}
+                            posters={posters}
+                            backdrops={backdrops}
+                        />
                     </div>
                 </React.Fragment>
             );
         };
 
-        return movie;
+        return movieMarkup;
     };
 };
 
 const mapStateToProps = state => {
-    let {loading, movie} = state.movies.popular.currentlyViewing
+    let {loading, movie, videos, posters_backdrops} = state.movies.popular.currentlyViewing;
+    let {posters, backdrops} = posters_backdrops
     return {
         loading: loading,
-        movie: movie
+        movie: movie.data,
+        videos: videos.data,
+        posters: posters,
+        backdrops: backdrops
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchMovie: (id) => dispatch(fetchDetailedMoviesInit(id))
+        fetchMovie: (id) => dispatch(fetchMovieInit(id))
     };
 };
 

@@ -38,3 +38,12 @@
 .crewList {
     display: flex;
 }
+
+.castContainer h3 {
+    color: #2a9bb2
+}
+
+.mediaContainer {
+    width: 80%;
+    margin: 0 auto;
+}

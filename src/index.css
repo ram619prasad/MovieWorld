@@ -70,3 +70,13 @@ body h4 {
   font-size: 1.8rem;
   font-family: 'Roboto Bold';
 }
+
+body h5 {
+  font-size: 1.6rem;
+  font-family: 'Roboto Bold';
+}
+
+body h6 {
+  font-size: 1.4rem;
+  font-family: 'Roboto Bold';
+}

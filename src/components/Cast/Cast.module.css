@@ -1,0 +1,22 @@
+.castContainer {
+    width: 80%;
+    margin: 4rem auto;
+}
+
+.castList {
+    display: flex;
+    justify-content: space-between;
+    margin: 3rem 0 5rem 0;
+}
+
+.fullCast:link,
+.fullCast:visited {
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: rgba(0,0,0,.5);
+}
+
+.fullCast:hover,
+.fullCast:active {
+    color: #ef814f;
+}

@@ -1,0 +1,28 @@
+.mediaMenu {
+    display: flex;
+}
+
+.mediaTypes {
+    display: flex;
+    align-items: center;
+    width: 40%;
+    justify-content: space-around;
+    margin: 0 5rem;
+}
+
+.mediaTypes li {
+    list-style: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.mediaTypes li:hover {
+   color: #ef814f;
+}
+
+.mediaLightBox {
+    margin: 2rem 0;
+    width: 100%;
+    height: 300px;
+    background-color: aquamarine;
+}
