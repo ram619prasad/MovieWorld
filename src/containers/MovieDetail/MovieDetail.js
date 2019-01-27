@@ -94,7 +94,7 @@ class MovieDetail extends Component {
 
 const mapStateToProps = state => {
     let {loading, movie, videos, posters_backdrops} = state.movies.popular.currentlyViewing;
-    let {posters, backdrops} = posters_backdrops
+    let {posters, backdrops} = posters_backdrops;
     return {
         loading: loading,
         movie: movie.data,

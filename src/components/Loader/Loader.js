@@ -1,7 +1,7 @@
 import React from 'react';
 import classes from './Loader.module.css';
 
-export default () => {
+export default (props) => {
     return (
         <div className={classes.loderContainer}>
             <div className={classes.Loader}>

@@ -5,9 +5,8 @@
 .mediaTypes {
     display: flex;
     align-items: center;
-    width: 40%;
+    width: 100%;
     justify-content: space-around;
-    margin: 0 5rem;
 }
 
 .mediaTypes li {
@@ -23,6 +22,5 @@
 .mediaLightBox {
     margin: 2rem 0;
     width: 100%;
-    height: 300px;
-    background-color: aquamarine;
+    height: 30rem;
 }

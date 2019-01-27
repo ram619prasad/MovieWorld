@@ -150,7 +150,17 @@ export const fetchPosterBackgroundsInit = (id) => {
         dispatch(fetchPosterBackgroundsStarted());
         return axios.get(`/${id}/images`, { params: { include_image_language: 'en,null' } })
             .then(res => {
-                let data = res.data;
+                let {id, backdrops, posters} = res.data;
+
+                backdrops = backdrops.map(bd => {
+                    return {...bd, file_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + bd.file_path}
+                });
+
+                posters = posters.map(pos => {
+                    return {...pos, file_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + pos.file_path}
+                })
+
+                let data = {id, posters, backdrops}
                 dispatch(fetchPosterBackgroundsCompleted(data));
             })
             .catch(err => {
