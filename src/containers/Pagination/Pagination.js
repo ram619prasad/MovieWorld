@@ -129,13 +129,17 @@ class Pagination extends Component {
 
     render() {
         let {firstPage, currentPage, totalPages, pathName} = this.state;
-        return (
-            <div className={classes.paginationContainer}>
-                {this.paginationStartBlock()}
-                {this.paginationCenterBlock(firstPage, currentPage, totalPages, pathName)}
-                {this.paginationEndBlock()}
-            </div>
-        );
+        let pagination = null;
+        if (totalPages) {
+            pagination = (
+                <div className={classes.paginationContainer}>
+                    {this.paginationStartBlock()}
+                    {this.paginationCenterBlock(firstPage, currentPage, totalPages, pathName)}
+                    {this.paginationEndBlock()}
+                </div>
+            );
+        };
+        return pagination;
     };
 };
 
@@ -143,7 +147,7 @@ Pagination.propTypes = {
     pathName: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     currentPage: PropTypes.number.isRequired,
-    totalPages: PropTypes.number.isRequired
+    totalPages: PropTypes.number
 }
 
 export default Pagination;

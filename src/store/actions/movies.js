@@ -1,205 +1,136 @@
 import axios from '../../axiosInstances/movieInstance';
+import { fetchPosterBackgroundsInit, fetchMovieVideosInit } from './index';
 
 import { 
     FETCH_MOVIES_STARTED, FETCH_MOVIES_COMPLETED, FETCH_MOVIES_FAILED,
     FETCH_MOVIE_DATA_STARTED, FETCH_MOVIE_DATA_COMPLETED, FETCH_MOVIE_DATA_FAILED,
     FETCH_MOVIE_DETAILS_STARTED, FETCH_MOVIE_DETAILS_FAILED, FETCH_MOVIE_DETAILS_COMPLETED,
-    FETCH_MOVIE_VIDEOS_STARTED, FETCH_MOVIE_VIDEOS_COMPLETED, FETCH_MOVIE_VIDEOS_FAILED,
-    FETCH_MOVIE_POSTER_BACKDROPS_STARTED, FETCH_MOVIE_POSTER_BACKDROPS_COMPLETED, FETCH_MOVIE_POSTER_BACKDROPS_FAILED,
 } from './actionTypes';
 
-export const fetchMoviesStarted = () => {
+export const fetchMoviesStarted = (category) => {
     return {
-        type: FETCH_MOVIES_STARTED
+        type: FETCH_MOVIES_STARTED,
+        category
     };
 };
 
-export const fetchMoviesFailed = (error) => {
+export const fetchMoviesFailed = (category, error) => {
     return {
         type: FETCH_MOVIES_FAILED,
-        error: error
+        error: error,
+        category
     };
 };
 
-export const fetchMoviesCompleted = (movies, current_page, total_pages) => {
+export const fetchMoviesCompleted = (category, movies, current_page, total_pages) => {
     return {
         type: FETCH_MOVIES_COMPLETED,
         movies: movies,
         current_page: current_page,
-        total_pages: total_pages
+        total_pages: total_pages,
+        category
     };
 };
 
-export const fetchPopularMoviesInit = (pageNo) => {
+export const fetchMoviesInit = (category, pageNo) => {
     return dispatch => {
-        dispatch(fetchMoviesStarted());
+        dispatch(fetchMoviesStarted(category));
         let page = pageNo || 1;
-        axios.get('/popular', { params: { page: page } })
+        axios.get(`/${category}`, { params: { page: page } })
             .then(res => {
-                let popularMovies = res.data.results.map((mov) => {
+                let modifiedMovies = res.data.results.map((mov) => {
                     return { 
                         ...mov,
                         poster_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + mov.poster_path
                     };
                 });
-
                 let{page, total_pages} = res.data;
-                let movies = {[page]: popularMovies};
-                dispatch(fetchMoviesCompleted(movies, page, total_pages));
+                let movies = {[page]: modifiedMovies};
+                dispatch(fetchMoviesCompleted(category, movies, page, total_pages));
             })
             .catch(err => {
-                dispatch(fetchMoviesFailed('Fetching movies failed'));
+                dispatch(fetchMoviesFailed(category, 'Fetching movies failed'));
             });
     };
 };
 
-export const fetchMovieDetailsStarted = () => {
-    return {
-        type: FETCH_MOVIE_DETAILS_STARTED
-    };
-};
+// export const fetchMovieDetailsStarted = (category) => {
+//     return {
+//         type: FETCH_MOVIE_DETAILS_STARTED,
+//         category
+//     };
+// };
 
-export const fetchMovieDetailsFailed = (error) => {
-    return {
-        type: FETCH_MOVIE_DETAILS_FAILED,
-        error: error
-    };
-};
+// export const fetchMovieDetailsFailed = (category, error) => {
+//     return {
+//         type: FETCH_MOVIE_DETAILS_FAILED,
+//         error: error,
+//         category
+//     };
+// };
 
-export const fetchMovieDetailsCompleted = (movie) => {
+export const fetchMovieDetailsCompleted = (category, id, movie) => {
     return {
         type: FETCH_MOVIE_DETAILS_COMPLETED,
         movie: movie,
+        category,
+        id
     };
 };
 
-export const fetchMovieDetailsInit = (id) => {
+export const fetchMovieDetailsInit = (category, id) => {
     return dispatch => {
-        dispatch(fetchMovieDetailsStarted());
+        // dispatch(fetchMovieDetailsStarted(category));
+
         return axios.get(`/${id}`, { params: {append_to_response: 'credits'}})
             .then(res => {
                 let data = res.data;
                 let movie = {   ...data,
                                 backdrop_path: process.env.REACT_APP_API_MOVIE_BACKDROP_URL + data.backdrop_path,
                                 poster_path: process.env.REACT_APP_API_POSTER_BASE_URL + data.poster_path
-                            }
-                dispatch(fetchMovieDetailsCompleted(movie));
+                            }                
+                dispatch(fetchMovieDetailsCompleted(category, id, movie));
             })
             .catch(err => {
-                dispatch(fetchMovieDetailsFailed(`Fetching Movie with Id ${id} failed. Please try again`));
+                // dispatch(fetchMovieDetailsFailed(category, `Fetching Movie with Id ${id} failed. Please try again`));
             });
     };
 };
 
-export const fetchMovieVideosStarted = () => {
+export const fetchMovieStarted = (category) => {
     return {
-        type: FETCH_MOVIE_VIDEOS_STARTED
+        type: FETCH_MOVIE_DATA_STARTED,
+        category
     };
 };
 
-export const fetchMovieVideosFailed = (error) => {
-    return {
-        type: FETCH_MOVIE_VIDEOS_FAILED,
-        error: error
-    };
-};
-
-export const fetchMovieVideosCompleted = (videos) => {
-    return {
-        type: FETCH_MOVIE_VIDEOS_COMPLETED,
-        videos: videos,
-    };
-};
-
-export const fetchMovieVideosInit = (id) => {
-    return dispatch => {
-        dispatch(fetchMovieVideosStarted());
-        return axios.get(`/${id}/videos`)
-            .then(res => {
-                let videos = res.data;
-                dispatch(fetchMovieVideosCompleted(videos));
-            })
-            .catch(err => {
-                dispatch(fetchMovieVideosFailed(`Fetching Videos for Movie with Id ${id} failed. Please try again`));
-            });
-    };
-};
-
-export const fetchPosterBackgroundsStarted = () => {
-    return {
-        type: FETCH_MOVIE_POSTER_BACKDROPS_STARTED
-    };
-};
-
-export const fetchPosterBackgroundsFailed = (error) => {
-    return {
-        type: FETCH_MOVIE_POSTER_BACKDROPS_FAILED,
-        error: error
-    };
-};
-
-export const fetchPosterBackgroundsCompleted = (data) => {
-    return {
-        type: FETCH_MOVIE_POSTER_BACKDROPS_COMPLETED,
-        data: data,
-    };
-};
-
-export const fetchPosterBackgroundsInit = (id) => {
-    return dispatch => {
-        dispatch(fetchPosterBackgroundsStarted());
-        return axios.get(`/${id}/images`, { params: { include_image_language: 'en,null' } })
-            .then(res => {
-                let {id, backdrops, posters} = res.data;
-
-                backdrops = backdrops.map(bd => {
-                    return {...bd, file_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + bd.file_path}
-                });
-
-                posters = posters.map(pos => {
-                    return {...pos, file_path: process.env.REACT_APP_API_POSTER_BASE_URL_MEDIUM + pos.file_path}
-                })
-
-                let data = {id, posters, backdrops}
-                dispatch(fetchPosterBackgroundsCompleted(data));
-            })
-            .catch(err => {
-                dispatch(fetchPosterBackgroundsFailed(`Fetching Videos for Movie with Id ${id} failed. Please try again`));
-            });
-    };
-};
-
-export const fetchMovieStarted = () => {
-    return {
-        type: FETCH_MOVIE_DATA_STARTED
-    };
-};
-
-export const fetchMovieFailed = (error) => {
+export const fetchMovieFailed = (category, error) => {
     return {
         type: FETCH_MOVIE_DATA_FAILED,
-        error: error
+        error,
+        category
     };
 };
 
-export const fetchMovieCompleted = () => {
+export const fetchMovieCompleted = (category, id) => {
     return {
         type: FETCH_MOVIE_DATA_COMPLETED,
-        info: 'All movie data fetched succesfully',
+        info: `Movie data, Videos, Posters and Backdrops loaded for movie ${id}`,
+        category
     };
 };
 
-export const fetchMovieInit = (id) => {
+export const fetchMovieInit = (category, id) => {
     return dispatch => {
-        dispatch(fetchMovieStarted());
+        dispatch(fetchMovieStarted(category));
         return Promise.all([
-                dispatch(fetchMovieDetailsInit(id)),
+                dispatch(fetchMovieDetailsInit(category, id)),
                 dispatch(fetchMovieVideosInit(id)),
                 dispatch(fetchPosterBackgroundsInit(id))
             ]).then(() =>
-                dispatch(fetchMovieCompleted())
+                dispatch(fetchMovieCompleted(category, id))
             ).catch(err =>
-                dispatch(fetchMovieFailed())
+                dispatch(fetchMovieFailed(category))
             )
     };
 };

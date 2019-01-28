@@ -11,18 +11,12 @@ class LazyImage extends PureComponent {
     }
 
     componentWillReceiveProps(nextProps) {
-        // console.log('====================================');
-        // console.log('coming');
         this.setState({ src: null })
-        console.log('====================================');
         if(nextProps.src !== this.props.src) {
-            console.log('previous props not equal to current props');
             const imageLoader = new Image();
-            console.log('nextProps', nextProps)
             imageLoader.src = nextProps.src;
         
             imageLoader.onload = () => {
-                console.log('new src', nextProps.src)
                 this.setState({ src: nextProps.src });
             };
         }
@@ -38,32 +32,6 @@ class LazyImage extends PureComponent {
           this.setState({ src });
         };
     }
-
-    // static getDevivedStateFromProps = (props, state) => {
-    //     console.log('====================================');
-    //     console.log('dude');
-    //     console.log('====================================');
-    //     // const { src } = props;
-    //     // const imageLoader = new Image();
-    //     // imageLoader.src = src;
-    //     // imageLoader.onload = () => {
-    //     //     // this.setState({ src });
-    //     //     return {
-    //     //         src: src
-    //     //     }
-    //     // };
-    //     // if(props.src !)
-    //     if (props.src !== state.src) {
-    //         return {
-    //             src: 'ram'
-    //         }
-    //     }
-
-    //     return null;
-    // }
-    // shouldComponentUpdate() {
-    //     return true;
-    // }
 
 
     render() {

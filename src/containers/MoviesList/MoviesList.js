@@ -6,31 +6,28 @@ import classes from './MoviesList.module.css';
 import MoviesListItem from './MovieListItem/MovieListItem';
 import Pagination from '../Pagination/Pagination';
 
-import { fetchPopularMoviesInit } from '../../store/actions/index';
+import { fetchMoviesInit } from '../../store/actions/index';
 
 class MoviesList extends Component {
 
     constructor(props) {
         super(props);
-        this.location = {...this.props.location};
-        this.match = {...this.props.match};
-
-        this.paginationType = this.props.match.params.type;
         this.page = Number(getPage(this.props.location.search));
+        this.category = this.props.match.params.type;
     };
 
     componentDidMount() {
-        let fetchMovies = this.props.movies.map((mov) => Number(Object.keys(mov)[0]));
+        let alreadyFetchedPages = this.props.movies.map(x =>  Number(Object.keys(x)[0]));
 
-        if (fetchMovies.indexOf(this.page) === -1) {
-            this.props.fetchMovies(this.page);
+        if (alreadyFetchedPages.indexOf(this.page) === -1) {
+            this.props.fetchMovies('popular', this.page);
         };
+
+        window.scrollTo(0, 0);
     };
 
-    componentDidUpdate = () => { window.scrollTo(0, 0); }
-
     handleMovieClick = (id) => {
-        let url = `${this.location.pathname}/${id}`;
+        let url = `${this.props.location.pathname}/${id}`;
         this.props.history.push(url)
     }
 
@@ -67,8 +64,8 @@ class MoviesList extends Component {
                     this.props.total_pages &&
                     <Pagination
                         currentPage={this.page}
-                        pathName={this.location.pathname}
-                        type={this.paginationType}
+                        pathName={this.props.location.pathname}
+                        type={this.props.match.params.type}
                         totalPages={this.props.total_pages} />
                 }
             </div>
@@ -77,20 +74,20 @@ class MoviesList extends Component {
 };
 
 const mapStateToProps = (state, ownProps)=> {
-    let {movies, loading, errors, current_page, total_pages} = state.movies.popular;
-    let currentlyViewingPage = Number(getPage(ownProps.location.search));
+    let category = ownProps.match.params.type;
+    let {index, loading, errors, current_page, total_pages} = state.movies[category];
+    let currentPage = Number(getPage(ownProps.location.search));
 
-    let currentPageMovies = movies.find((movie) => {
+    let currentPageData = index.find((movie) => {
         let moviePage = Number(Object.keys(movie)[0]);
-
-        if(moviePage === currentlyViewingPage) {
+        if(moviePage === currentPage) {
             return movie;
         };
     });
 
     return {
-        movies: movies,
-        currentPageMovies: currentPageMovies && Object.values(currentPageMovies)[0],
+        movies: index,
+        currentPageMovies: currentPageData && Object.values(currentPageData)[0],
         loading: loading,
         errors: errors,
         current_page: current_page,
@@ -100,7 +97,7 @@ const mapStateToProps = (state, ownProps)=> {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchMovies: (page) => dispatch(fetchPopularMoviesInit(page))
+        fetchMovies: (category, page) => dispatch(fetchMoviesInit(category, page))
     };
 };
 

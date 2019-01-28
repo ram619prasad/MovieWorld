@@ -13,15 +13,15 @@ import Media from '../Media/Media';
 class MovieDetail extends Component {
     componentDidMount() {
         let id = this.props.match.params.id;
-        this.props.fetchMovie(id);
+        this.props.fetchMovie('popular', id);
     };
 
-    getRandomColorRgb = () => {
-        let red = Math.floor(Math.random() * 256);
-        let green = Math.floor(Math.random() * 256);
-        let blue = Math.floor(Math.random() * 256);
-        return `rgb(${red}, ${green}, ${blue})`;
-    }
+    // getRandomColorRgb = () => {
+    //     let red = Math.floor(Math.random() * 256);
+    //     let green = Math.floor(Math.random() * 256);
+    //     let blue = Math.floor(Math.random() * 256);
+    //     return `rgb(${red}, ${green}, ${blue})`;
+    // }
 
     consolidatedCrew = (crew) => {
         let aggregatedCrew = {Director: [], Producer: [], Editor: [], Screenplay: []};
@@ -36,9 +36,9 @@ class MovieDetail extends Component {
 
 
     render() {
-        let {movie, videos, posters, backdrops} = this.props;
-        let movieMarkup = <Loader />
-        if (movie && videos && posters && backdrops) {
+        let {movie, videos, poster_backdrops} = this.props;
+        let movieMarkup = <Loader />;
+        if (movie) {
             let backgroundImage = `url(${movie.backdrop_path})`;
             let posterImage = `url(${movie.poster_path})`;
             let movieYear = moment(movie.release_date).format('YYYY');
@@ -77,13 +77,15 @@ class MovieDetail extends Component {
                         <Cast cast={topCast}/>
                     </div>
 
-                    <div className={classes.mediaContainer}>
-                        <Media
-                            videos={videos}
-                            posters={posters}
-                            backdrops={backdrops}
-                        />
-                    </div>
+                    {  poster_backdrops && videos &&
+                        <div className={classes.mediaContainer}>
+                            <Media
+                                videos={videos}
+                                posters={poster_backdrops.posters}
+                                backdrops={poster_backdrops.backdrops}
+                            />
+                        </div>
+                    }
                 </React.Fragment>
             );
         };
@@ -92,21 +94,25 @@ class MovieDetail extends Component {
     };
 };
 
-const mapStateToProps = state => {
-    let {loading, movie, videos, posters_backdrops} = state.movies.popular.currentlyViewing;
-    let {posters, backdrops} = posters_backdrops;
+const mapStateToProps = (state, ownProps) => {
+    let category = ownProps.match.params.type;
+    let id = ownProps.match.params.id;
+    let loading = state.movies[category].show.loading;
+    let movie = state.movies[category].show.item[id];
+    let posters_backdrops = state.images.poster_backdrops.data[id];
+    let videos = state.videos.videos.data[id];
+
     return {
         loading: loading,
-        movie: movie.data,
-        videos: videos.data,
-        posters: posters,
-        backdrops: backdrops
+        movie: movie,
+        poster_backdrops: posters_backdrops,
+        videos: videos,
     };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchMovie: (id) => dispatch(fetchMovieInit(id))
+        fetchMovie: (category, id) => dispatch(fetchMovieInit(category, id))
     };
 };
 
